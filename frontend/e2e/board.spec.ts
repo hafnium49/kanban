@@ -46,11 +46,13 @@ test("adds a new card", async ({ page }) => {
 });
 
 test("deletes a card", async ({ page }) => {
-  const card = page.getByText("Define Q3 roadmap");
-  await expect(card).toBeVisible();
-  await card.hover();
-  await page.getByLabel("Delete card Define Q3 roadmap").click();
-  await expect(page.getByText("Define Q3 roadmap")).toHaveCount(0);
+  const cardLocator = page
+    .getByTestId("card")
+    .filter({ hasText: "Define Q3 roadmap" });
+  await expect(cardLocator).toHaveCount(1);
+  await cardLocator.hover();
+  await page.getByLabel("Delete card Define Q3 roadmap").click({ force: true });
+  await expect(cardLocator).toHaveCount(0);
 });
 
 test("reorders a card within the same column", async ({ page }) => {

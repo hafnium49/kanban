@@ -13,10 +13,10 @@ todos:
     status: completed
   - id: e2e
     content: Phase 4 — Write Playwright specs for load, rename, add, delete, drag within and across columns
-    status: in_progress
+    status: completed
   - id: deliver
     content: Phase 5 — Write minimal README, run full lint/build/test/e2e, leave dev server running
-    status: pending
+    status: in_progress
 isProject: false
 ---
 
