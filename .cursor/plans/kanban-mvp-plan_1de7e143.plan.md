@@ -4,13 +4,13 @@ overview: Build a single-board Kanban MVP as a client-rendered Next.js app in `f
 todos:
   - id: scaffold
     content: Phase 1 — Scaffold Next.js app in frontend/, add .gitignore, configure Tailwind brand colors, set up Vitest and Playwright
-    status: in_progress
+    status: completed
   - id: state
     content: Phase 2 — Implement seed data and zustand store (rename/add/delete/move) with full unit-test coverage
-    status: pending
+    status: completed
   - id: ui
     content: Phase 3 — Build Board, Column, Card, AddCardForm with @dnd-kit, brand styling, and component tests
-    status: pending
+    status: in_progress
   - id: e2e
     content: Phase 4 — Write Playwright specs for load, rename, add, delete, drag within and across columns
     status: pending
