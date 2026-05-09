@@ -16,7 +16,7 @@ todos:
     status: completed
   - id: deliver
     content: Phase 5 — Write minimal README, run full lint/build/test/e2e, leave dev server running
-    status: in_progress
+    status: completed
 isProject: false
 ---
 
