@@ -186,7 +186,7 @@ export function KanbanBoard() {
           aria-label="Kanban board"
           className="flex-1 overflow-x-auto px-4 py-5 sm:px-6 lg:px-8"
         >
-          <div className="mx-auto grid w-max min-w-full max-w-[1600px] grid-cols-[repeat(5,minmax(17.5rem,1fr))] gap-4">
+          <div className="mx-auto grid w-max min-w-full max-w-[1600px] grid-cols-[repeat(5,minmax(16.25rem,1fr))] gap-4">
             {board.columns.map((column) => (
               <KanbanColumnView
                 key={column.id}
