@@ -19,7 +19,7 @@ export function Board() {
   const moveCard = useBoardStore((state) => state.moveCard);
 
   const sensors = useSensors(
-    useSensor(PointerSensor, { distance: 8 }),
+    useSensor(PointerSensor),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
@@ -31,14 +31,21 @@ export function Board() {
     const activeId = String(active.id);
     const overId = String(over.id);
 
+    console.log("Drag ended:", { activeId, overId });
+
     if (activeId === overId) return;
 
     // Parse the active card ID (format: "column-col-1-card-card-1")
     const activeMatch = activeId.match(/^column-(.+)-card-(.+)$/);
-    if (!activeMatch) return;
+    if (!activeMatch) {
+      console.log("Active match failed");
+      return;
+    }
 
     const fromColId = activeMatch[1];
     const cardId = activeMatch[2];
+
+    console.log("From:", { fromColId, cardId });
 
     // Parse the over ID (could be a card or column droppable area)
     // format: "column-col-1" or "column-col-1-card-card-1"
@@ -55,17 +62,24 @@ export function Board() {
       const toColumn = board.columns.find((col) => col.id === toColId);
       if (!toColumn) return;
       toIndex = toColumn.cardIds.indexOf(`card-${overCardId}`) ?? 0;
+      console.log("Dropped on card:", { toColId, overCardId, toIndex });
     } else if (overColMatch) {
       // Dropping onto column droppable area
       toColId = overColMatch[1];
       const toColumn = board.columns.find((col) => col.id === toColId);
-      if (!toColumn) return;
+      if (!toColumn) {
+        console.log("Column not found:", toColId);
+        return;
+      }
       toIndex = toColumn.cardIds.length;
+      console.log("Dropped on column:", { toColId, toIndex });
     } else {
+      console.log("Over match failed");
       return;
     }
 
     if (fromColId && cardId && toColId) {
+      console.log("Moving card:", { cardId, fromColId, toColId, toIndex });
       moveCard(`card-${cardId}`, fromColId, toColId, toIndex);
     }
   };
