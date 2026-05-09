@@ -3,6 +3,8 @@
 import { useState } from "react";
 import { Column as ColumnType } from "@/types";
 import { useBoardStore } from "@/store/boardStore";
+import { useDroppable } from "@dnd-kit/core";
+import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
 import { Card } from "./Card";
 import { Plus, Edit2, Check, X } from "lucide-react";
 
@@ -20,6 +22,7 @@ export function Column({ column, cards }: ColumnProps) {
 
   const addCard = useBoardStore((state) => state.addCard);
   const renameColumn = useBoardStore((state) => state.renameColumn);
+  const { setNodeRef } = useDroppable({ id: `column-${column.id}` });
 
   const handleSaveTitle = () => {
     if (newTitle.trim()) {
@@ -85,11 +88,16 @@ export function Column({ column, cards }: ColumnProps) {
       </div>
 
       {/* Cards List */}
-      <div className="space-y-2 flex-1">
-        {column.cardIds.map((cardId) => (
-          <Card key={cardId} card={cards[cardId]} />
-        ))}
-      </div>
+      <SortableContext
+        items={column.cardIds}
+        strategy={verticalListSortingStrategy}
+      >
+        <div ref={setNodeRef} className="space-y-2 flex-1 min-h-12">
+          {column.cardIds.map((cardId) => (
+            <Card key={cardId} card={cards[cardId]} columnId={column.id} />
+          ))}
+        </div>
+      </SortableContext>
 
       {/* Add Card Form */}
       {isAddingCard ? (

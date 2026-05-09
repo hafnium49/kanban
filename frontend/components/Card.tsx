@@ -2,15 +2,20 @@
 
 import { Card as CardType } from "@/types";
 import { useBoardStore } from "@/store/boardStore";
+import { useDraggable } from "@dnd-kit/core";
 import { Trash2 } from "lucide-react";
 
 interface CardProps {
   card: CardType;
-  isDragging?: boolean;
+  columnId: string;
 }
 
-export function Card({ card, isDragging }: CardProps) {
+export function Card({ card, columnId }: CardProps) {
   const deleteCard = useBoardStore((state) => state.deleteCard);
+  const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
+    id: `column-${columnId}-card-${card.id}`,
+    data: { card, columnId },
+  });
 
   const handleDelete = () => {
     if (confirm(`Delete "${card.title}"?`)) {
@@ -20,7 +25,10 @@ export function Card({ card, isDragging }: CardProps) {
 
   return (
     <div
-      className={`bg-white border-l-4 border-accent-yellow p-4 rounded shadow-sm hover:shadow-md transition-shadow cursor-move group ${
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
+      className={`bg-white border-l-4 border-accent-yellow p-4 rounded shadow-sm hover:shadow-md transition-shadow cursor-grab active:cursor-grabbing group ${
         isDragging ? "opacity-50" : ""
       }`}
     >
