@@ -41,7 +41,7 @@ describe("<Board />", () => {
     await user.click(addButtons[0]);
     await user.type(screen.getByLabelText("Card title"), "Plan offsite");
     await user.type(screen.getByLabelText("Card details"), "Pick venue and date.");
-    await user.click(screen.getByRole("button", { name: "Add card" }));
+    await user.click(screen.getByRole("button", { name: "Add" }));
     expect(screen.getByText("Plan offsite")).toBeInTheDocument();
     expect(useBoardStore.getState().columns[0].cardIds).toHaveLength(3);
   });

@@ -27,9 +27,10 @@ export function Column({ column, accentClass }: Props) {
     if (editing) inputRef.current?.select();
   }, [editing]);
 
-  useEffect(() => {
+  const startEditing = () => {
     setDraftTitle(column.title);
-  }, [column.title]);
+    setEditing(true);
+  };
 
   const { setNodeRef, isOver } = useDroppable({
     id: column.id,
@@ -68,7 +69,7 @@ export function Column({ column, accentClass }: Props) {
         ) : (
           <button
             type="button"
-            onClick={() => setEditing(true)}
+            onClick={startEditing}
             aria-label={`Rename column ${column.title}`}
             data-testid="column-title"
             className="flex-1 text-left text-sm font-semibold uppercase tracking-wider text-brand-navy hover:text-brand-blue transition"

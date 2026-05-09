@@ -10,10 +10,10 @@ todos:
     status: completed
   - id: ui
     content: Phase 3 — Build Board, Column, Card, AddCardForm with @dnd-kit, brand styling, and component tests
-    status: in_progress
+    status: completed
   - id: e2e
     content: Phase 4 — Write Playwright specs for load, rename, add, delete, drag within and across columns
-    status: pending
+    status: in_progress
   - id: deliver
     content: Phase 5 — Write minimal README, run full lint/build/test/e2e, leave dev server running
     status: pending

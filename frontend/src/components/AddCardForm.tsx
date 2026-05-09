@@ -57,7 +57,7 @@ export function AddCardForm({ columnId, onClose }: Props) {
           className="rounded-md bg-brand-purple px-3 py-1.5 text-sm font-medium text-white hover:opacity-90 transition disabled:opacity-50"
           disabled={!title.trim()}
         >
-          Add card
+          Add
         </button>
         <button
           type="button"
