@@ -34,15 +34,16 @@ export function Board() {
     if (activeId === overId) return;
 
     // Parse the active card ID (format: "column-col-1-card-card-1")
-    const activeMatch = activeId.match(/^column-([^-]+)-card-(.+)$/);
+    const activeMatch = activeId.match(/^column-(.+)-card-(.+)$/);
     if (!activeMatch) return;
 
     const fromColId = activeMatch[1];
     const cardId = activeMatch[2];
 
     // Parse the over ID (could be a card or column droppable area)
-    const overCardMatch = overId.match(/^column-([^-]+)-card-(.+)$/);
-    const overColMatch = overId.match(/^column-(.+)$/);
+    // format: "column-col-1" or "column-col-1-card-card-1"
+    const overCardMatch = overId.match(/^column-(.+)-card-(.+)$/);
+    const overColMatch = overId.match(/^column-([a-z]+-\d+)$/);
 
     let toColId: string | undefined;
     let toIndex: number;
@@ -51,13 +52,13 @@ export function Board() {
       // Dropping onto another card
       toColId = overCardMatch[1];
       const overCardId = overCardMatch[2];
-      const toColumn = board.columns.find((col) => col.id === `col-${toColId}`);
+      const toColumn = board.columns.find((col) => col.id === toColId);
       if (!toColumn) return;
       toIndex = toColumn.cardIds.indexOf(`card-${overCardId}`) ?? 0;
     } else if (overColMatch) {
       // Dropping onto column droppable area
       toColId = overColMatch[1];
-      const toColumn = board.columns.find((col) => col.id === `col-${toColId}`);
+      const toColumn = board.columns.find((col) => col.id === toColId);
       if (!toColumn) return;
       toIndex = toColumn.cardIds.length;
     } else {
@@ -65,7 +66,7 @@ export function Board() {
     }
 
     if (fromColId && cardId && toColId) {
-      moveCard(`card-${cardId}`, `col-${fromColId}`, `col-${toColId}`, toIndex);
+      moveCard(`card-${cardId}`, fromColId, toColId, toIndex);
     }
   };
 
