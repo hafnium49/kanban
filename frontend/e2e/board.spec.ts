@@ -8,17 +8,17 @@ test.describe("Kanban Board", () => {
   test("loads with 5 columns and correct titles", async ({ page }) => {
     await expect(page.getByText("Project Board")).toBeVisible();
 
-    const expectedTitles = ["BACKLOG", "TO DO", "IN PROGRESS", "REVIEW", "DONE"];
-    for (const title of expectedTitles) {
-      await expect(page.getByTestId(`column-title-col-${expectedTitles.indexOf(title) + 1}`)).toHaveTextContent(
-        new RegExp(title, "i")
-      );
+    const expectedTitles = ["Backlog", "To Do", "In Progress", "Review", "Done"];
+    for (let i = 0; i < expectedTitles.length; i++) {
+      await expect(page.getByTestId(`column-title-col-${i + 1}`)).toContainText(expectedTitles[i], {
+        ignoreCase: true,
+      });
     }
   });
 
   test("each column shows a card count", async ({ page }) => {
     for (let i = 1; i <= 5; i++) {
-      await expect(page.getByTestId(`column-count-col-${i}`)).toHaveTextContent("2");
+      await expect(page.getByTestId(`column-count-col-${i}`)).toHaveText("2");
     }
   });
 
@@ -29,7 +29,7 @@ test.describe("Kanban Board", () => {
     await page.getByTestId("add-card-save").click();
 
     await expect(page.getByText("New test card")).toBeVisible();
-    await expect(page.getByTestId("column-count-col-1")).toHaveTextContent("3");
+    await expect(page.getByTestId("column-count-col-1")).toHaveText("3");
   });
 
   test("prevents adding card with empty title", async ({ page }) => {
@@ -39,7 +39,7 @@ test.describe("Kanban Board", () => {
     // Form should still be visible (not submitted)
     await expect(page.getByTestId("add-card-title-input")).toBeVisible();
     // Count should not change
-    await expect(page.getByTestId("column-count-col-1")).toHaveTextContent("2");
+    await expect(page.getByTestId("column-count-col-1")).toHaveText("2");
   });
 
   test("can cancel adding a card", async ({ page }) => {
@@ -57,7 +57,7 @@ test.describe("Kanban Board", () => {
     await page.getByTestId("delete-card-1").click({ force: true });
 
     await expect(page.getByText(cardText)).not.toBeVisible();
-    await expect(page.getByTestId("column-count-col-1")).toHaveTextContent("1");
+    await expect(page.getByTestId("column-count-col-1")).toHaveText("1");
   });
 
   test("can rename a column by double-clicking", async ({ page }) => {
@@ -69,17 +69,18 @@ test.describe("Kanban Board", () => {
     await input.fill("Renamed Column");
     await input.press("Enter");
 
-    await expect(page.getByTestId("column-title-col-1")).toHaveTextContent(/renamed column/i);
+    await expect(page.getByTestId("column-title-col-1")).toContainText("Renamed Column", {
+      ignoreCase: true,
+    });
   });
 
   test("can drag a card to another column", async ({ page }) => {
     const card = page.getByTestId("card-card-1");
-    const sourceColumn = page.getByTestId("column-col-1");
     const destColumn = page.getByTestId("column-col-2");
 
     // Verify initial state
-    await expect(page.getByTestId("column-count-col-1")).toHaveTextContent("2");
-    await expect(page.getByTestId("column-count-col-2")).toHaveTextContent("2");
+    await expect(page.getByTestId("column-count-col-1")).toHaveText("2");
+    await expect(page.getByTestId("column-count-col-2")).toHaveText("2");
 
     // Perform drag
     const cardBox = await card.boundingBox();
@@ -88,13 +89,12 @@ test.describe("Kanban Board", () => {
     if (cardBox && destBox) {
       await page.mouse.move(cardBox.x + cardBox.width / 2, cardBox.y + cardBox.height / 2);
       await page.mouse.down();
-      // Move in steps to trigger drag detection
       await page.mouse.move(destBox.x + destBox.width / 2, destBox.y + destBox.height / 2, { steps: 10 });
       await page.mouse.up();
     }
 
     // After drag: source should have 1, dest should have 3
-    await expect(page.getByTestId("column-count-col-1")).toHaveTextContent("1");
-    await expect(page.getByTestId("column-count-col-2")).toHaveTextContent("3");
+    await expect(page.getByTestId("column-count-col-1")).toHaveText("1");
+    await expect(page.getByTestId("column-count-col-2")).toHaveText("3");
   });
 });
