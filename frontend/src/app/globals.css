@@ -104,7 +104,6 @@ body {
   display: flex;
   gap: 16px;
   padding: 24px;
-  overflow-x: auto;
   min-height: calc(100vh - 60px);
   align-items: flex-start;
 }
